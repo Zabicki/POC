@@ -1,46 +1,34 @@
-clear;
-clc;
-close all;
+clear; clc; close all;
 
-%% Global variables
 global sLimit vLimit MRes segRes index;
 
-%% Images
-
-umbrella = imread('umbrealla.png');
-image = umbrella;
-
-%% Parameters
+i1 = imread('umbrealla.png');
 
 colorThreshold = 5/255;
 minAreaSize = 27;
 
-%% Task
 figure;
-imshow(image, []);
+imshow(i1, []);
 title('original image');
  
-imageHSV = rgb2hsv(image);
-imageH = double(imageHSV(:,:,1));
+i1HSV = rgb2hsv(i1);
+i1H = double(i1HSV(:,:,1));
 
 figure;
-imshow(imageH, []);
+imshow(i1H, []);
 title('H vector');
 
-%% Globals initialization
 sLimit = 4;
 vLimit = 0.05;
 index = -1;
 
-[y, x] = size(imageH);
+[y, x] = size(i1H);
 
 segRes = zeros(y, x);
 MRes = zeros(y, x);
 
-%% Split recirsive call
-split(imageH, 1, 1, x, y);
+split(i1H, 1, 1, x, y);
 
-%% Loop
 i = 0;
 while i <= index
    IB = segRes == i;
@@ -80,8 +68,8 @@ imshow(segRes,[]);
 
 U = unique(segRes);
 
-for idx = 1:numel(U)
-    C = segRes == U(idx);
+for ix = 1:numel(U)
+    C = segRes == U(ix);
     if sum(C) < minAreaSize
        segRes(C) = 0; 
     end
@@ -89,9 +77,9 @@ end
 
 U = unique(segRes);
 
-for idx = 1:numel(U)
-    C = segRes == U(idx);
-    segRes(C) = idx;
+for ix = 1:numel(U)
+    C = segRes == U(ix);
+    segRes(C) = ix;
 end
 
 finalImage = label2rgb(segRes);
