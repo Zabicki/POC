@@ -50,7 +50,7 @@ wsp = obliczWspolczynniki(imageBW);
 for J = 1:Y
     for I = 1:X
         piksel = imageBW(J, I);
-        if piksel ~= 0 && ~(wsp(piksel, 2) > 0.50x && wsp(piksel, 2) < 0.66)
+        if piksel ~= 0 && ~(wsp(piksel, 2) > 0.50 && wsp(piksel, 2) < 0.66)
             imageBW(J, I) = 0;
         end
     end
