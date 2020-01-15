@@ -19,7 +19,7 @@ iStack = 1;
 
 visited(x, y) = 1;
 segmented(x, y) = 1;
-stack(iStack, 1) = x;
+stack5(iStack, 1) = x;
 stack(iStack, 2) = y;
 nS = 0;
 mV = 0;

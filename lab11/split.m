@@ -1,22 +1,25 @@
-function split(image, xS, yS, xE, yE)
-    global sLimit vLimit segRes index MRes
-    
-    subImage = image(yS:yE,xS:xE);
-    meanValue = mean(subImage(:));
-    stdevValue = std(subImage(:));
-    
-    if (stdevValue < vLimit) || ((xE - xS) <= sLimit)
-        index=index + 1;
-        segRes(yS:yE, xS:xE) = index;
-        MRes(yS:yE, xS:xE) = meanValue;
+function split(img,wsp1,wsp2,wsp3,wsp4)
+    global segRes;
+    global index;
+    global mRes;
+    sd_threshold = 0.05;
+    size_limit = 4;
+    squarevec = img(wsp1:wsp2,wsp3:wsp4);
+    vec = squarevec(:);
+    mean_vec = mean(vec);
+    std_vec = std(vec);
+    if(std_vec>=sd_threshold && wsp2-wsp1>=size_limit && wsp4-wsp3>=size_limit)      
+        xMid = wsp3 + floor((wsp4-wsp3) / 2);
+        yMid = wsp1 + floor((wsp2-wsp1) / 2);
+        split(img,wsp1,yMid,wsp3,xMid);
+        split(img,yMid+1,wsp2,wsp3,xMid);
+        split(img,wsp1,yMid,xMid+1,wsp4);
+        split(img,yMid+1,wsp2,xMid+1,wsp4);        
+       
     else
-        splitX = floor((xE + xS) / 2);
-        splitY = floor((yE + yS) / 2);
-        
-        % recursive call for 4 new Images I1 I2 I3 I4
-        split(image, xS, yS, splitX, splitY);
-        split(image, splitX + 1, yS, xE, splitY);
-        split(image, splitX + 1, splitY + 1, xE, yE);
-        split(image, xS, splitY + 1, splitX, yE);
+        segRes(wsp1:wsp2,wsp3:wsp4) = index;
+        mRes(wsp1:wsp2,wsp3:wsp4) = mean_vec;
+        index = index+1;        
     end
+       
 end
